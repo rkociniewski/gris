@@ -8,7 +8,7 @@ import rk.softblue.recruitment.model.JsonMapper.defaultMapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GithubControllerTest : BaseUnitTest() {
+class GithubControllerTest : BaseE2ETest() {
     @Test
     fun `Should return 'Hello world!' for ping endpoint`() = withTest {
         val response = client.get("/")

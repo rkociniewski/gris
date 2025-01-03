@@ -1,13 +1,18 @@
 package rk.softblue.recruitment.controller
 
-import io.ktor.client.call.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.client.call.body
+import io.ktor.server.application.Application
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import org.koin.ktor.ext.inject
 import rk.softblue.recruitment.model.RepoDetails
 import rk.softblue.recruitment.service.GitHubService
 
-fun Application.configureRouting(gitHubService: GitHubService) {
+fun Application.configureGHRouting() {
+    val gitHubService: GitHubService by inject()
+
     routing {
         get("/") {
             call.respondText("Hello World!")

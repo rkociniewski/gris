@@ -9,6 +9,7 @@ java.targetCompatibility = JavaVersion.VERSION_21
 val dokkaVersion: String by project
 val jacksonVersion: String by project
 val junitVersion: String by project
+val koinVersion: String by project
 val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
 val ktorVersion: String by project
@@ -32,7 +33,6 @@ repositories {
 
 application {
     mainClass.set("rk.softblue.recruitment.ApplicationKt")
-
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
@@ -40,6 +40,9 @@ application {
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("io.insert-koin:koin-ktor3:$koinVersion")
+    implementation("io.insert-koin:koin-test:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
