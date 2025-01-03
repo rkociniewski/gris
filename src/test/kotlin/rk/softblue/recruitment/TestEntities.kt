@@ -14,10 +14,10 @@ object TestEntities {
     )
 
     val repoDetailsOK = RepoDetails(
-        "rkociniewski/quiz",
+        "rkociniewski/prime",
         null,
-        "https://github.com/rkociniewski/quiz.git",
+        "https://github.com/rkociniewski/prime.git",
         0,
-        LocalDateTime.of(2023, 3, 18, 9, 49, 56)
+        LocalDateTime.of(2023, 3, 6, 22, 16, 48)
     )
 }

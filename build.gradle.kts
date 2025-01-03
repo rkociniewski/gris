@@ -1,11 +1,15 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+
 group = "rk.softblue"
 version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 val dokkaVersion: String by project
 val jacksonVersion: String by project
 val junitVersion: String by project
+val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
@@ -47,6 +51,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    runtimeOnly("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test-junit5"))
 }
@@ -64,25 +69,6 @@ tasks.test {
 }
 
 tasks {
-    // compile kotlin configuration
-    compileKotlin {
-        kotlinOptions {
-            allWarningsAsErrors = true // report an error if there are any warnings
-            verbose = true // enable verbose logging output
-            jvmTarget = java.targetCompatibility.toString() // target version of the generated JVM bytecode
-            freeCompilerArgs = listOf("-Xjsr305=strict") // list of additional compiler arguments
-        }
-    }
-
-    // compile kotlin tests configuration
-    compileTestKotlin {
-        kotlinOptions {
-            verbose = true // enable verbose logging output
-            jvmTarget = java.targetCompatibility.toString() // target version of the generated JVM bytecode
-            freeCompilerArgs = listOf("-Xjsr305=strict") // list of additional compiler arguments
-        }
-    }
-
     // dokka configuration
     dokkaHtml {
         outputDirectory.set(layout.buildDirectory.dir("dokka")) // output directory of dokka documentation.
@@ -102,5 +88,8 @@ tasks {
 }
 
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        verbose = true // enable verbose logging output
+        jvmTarget.set(JvmTarget.fromTarget(java.targetCompatibility.toString())) // target version of the generated JVM bytecode
+    }
 }

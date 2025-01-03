@@ -3,10 +3,10 @@ package rk.softblue.recruitment.e2eTests
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import junit.framework.TestCase.assertEquals
 import rk.softblue.recruitment.TestEntities
 import rk.softblue.recruitment.model.JsonMapper.defaultMapper
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class GithubControllerTest : BaseUnitTest() {
     @Test
@@ -25,21 +25,21 @@ class GithubControllerTest : BaseUnitTest() {
 
     @Test
     fun `Should return repo details when params are correct`() = withTest {
-        val response = client.get("/repositories/rkociniewski/quiz")
+        val response = client.get("/repositories/rkociniewski/prime")
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsOK), response.bodyAsText())
     }
 
     @Test
     fun `Should return repo details when owner is incorrect`() = withTest {
-        val response = client.get("/repositories/rkociniewski1/quiz")
+        val response = client.get("/repositories/rkociniewski1/prime")
         assertEquals(HttpStatusCode.NotFound, response.status)
         assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
     }
 
     @Test
     fun `Should return repo details when repo name is incorrect`() = withTest {
-        val response = client.get("/repositories/rkociniewski/quiz1")
+        val response = client.get("/repositories/rkociniewski/prime1")
         assertEquals(HttpStatusCode.NotFound, response.status)
         assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
     }

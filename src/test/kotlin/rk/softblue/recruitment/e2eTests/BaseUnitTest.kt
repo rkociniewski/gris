@@ -2,7 +2,7 @@ package rk.softblue.recruitment.e2eTests
 
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
+import io.ktor.utils.io.*
 import rk.softblue.recruitment.config.configureMonitoring
 import rk.softblue.recruitment.config.configureSerialization
 import rk.softblue.recruitment.config.errorHandling
