@@ -10,17 +10,17 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.text.SimpleDateFormat
 
 object JsonMapper {
-    val defaultMapper: ObjectMapper = jacksonObjectMapper()
+    val gitHubResponseMapper: ObjectMapper = jacksonObjectMapper()
 
     init {
-        defaultMapper.configure(SerializationFeature.INDENT_OUTPUT, true)
-        defaultMapper.setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
+        gitHubResponseMapper.configure(SerializationFeature.INDENT_OUTPUT, true)
+        gitHubResponseMapper.setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
             indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
             indentObjectsWith(DefaultIndenter("  ", "\n"))
         })
-        defaultMapper.registerModule(JavaTimeModule())
-        defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        defaultMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        defaultMapper.setDateFormat(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+        gitHubResponseMapper.registerModule(JavaTimeModule())
+        gitHubResponseMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        gitHubResponseMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        gitHubResponseMapper.setDateFormat(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
     }
 }

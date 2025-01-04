@@ -9,6 +9,6 @@ import rk.softblue.recruitment.model.JsonMapper
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, JacksonConverter(JsonMapper.defaultMapper))
+        register(ContentType.Application.Json, JacksonConverter(JsonMapper.gitHubResponseMapper))
     }
 }

@@ -3,9 +3,12 @@ package rk.softblue.recruitment.unitTests
 import BaseUnitTest
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.plugins.NotFoundException
+import io.mockk.coEvery
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 class GitHubServiceTest : BaseUnitTest() {
@@ -25,4 +28,16 @@ class GitHubServiceTest : BaseUnitTest() {
         // Verify that the correct URL was used
         assertEquals("https://api.github.com/repos/owner/repository", capturedRequests.firstOrNull())
     }
+
+    @Test
+    fun `should throw RepoNotFoundException when repo does not exist`() = runTest {
+        // Mock of not existing repository
+        coEvery { service.getRepoDetails("owner", "nonexistent-repo") } throws NotFoundException()
+
+        // Assertion of throwable
+        assertFailsWith<NotFoundException> {
+            service.getRepoDetails("owner", "nonexistent-repo")
+        }
+    }
+
 }

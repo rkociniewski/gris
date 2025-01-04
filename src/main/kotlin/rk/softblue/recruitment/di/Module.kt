@@ -40,7 +40,7 @@ private fun provideClient() = HttpClient(CIO) {
     }
 
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, JacksonConverter(JsonMapper.defaultMapper))
+        register(ContentType.Application.Json, JacksonConverter(JsonMapper.gitHubResponseMapper))
     }
 }
 

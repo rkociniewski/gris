@@ -20,4 +20,12 @@ object TestEntities {
         0,
         LocalDateTime.of(2023, 3, 6, 22, 16, 48)
     )
+
+    val exampleRepoDetails = RepoDetails(
+        "example/repo",
+        "An Example Repo description",
+        "https://github.com/example/repo.git",
+        2137,
+        LocalDateTime.of(2025, 1, 1, 0, 0, 0)
+    )
 }

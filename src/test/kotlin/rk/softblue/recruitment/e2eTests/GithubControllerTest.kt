@@ -4,7 +4,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import rk.softblue.recruitment.TestEntities
-import rk.softblue.recruitment.model.JsonMapper.defaultMapper
+import rk.softblue.recruitment.model.JsonMapper.gitHubResponseMapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,27 +20,27 @@ class GithubControllerTest : BaseE2ETest() {
     fun `Should return 404 for non-existing endpoint`() = withTest {
         val response = client.get("/doesnt_exist")
         assertEquals(HttpStatusCode.NotFound, response.status)
-        assertEquals(defaultMapper.writeValueAsString(TestEntities.endpointNotFoundResponse), response.bodyAsText())
+        assertEquals(gitHubResponseMapper.writeValueAsString(TestEntities.endpointNotFoundResponse), response.bodyAsText())
     }
 
     @Test
     fun `Should return repo details when params are correct`() = withTest {
         val response = client.get("/repositories/rkociniewski/prime")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsOK), response.bodyAsText())
+        assertEquals(gitHubResponseMapper.writeValueAsString(TestEntities.repoDetailsOK), response.bodyAsText())
     }
 
     @Test
     fun `Should return repo details when owner is incorrect`() = withTest {
         val response = client.get("/repositories/rkociniewski1/prime")
         assertEquals(HttpStatusCode.NotFound, response.status)
-        assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
+        assertEquals(gitHubResponseMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
     }
 
     @Test
     fun `Should return repo details when repo name is incorrect`() = withTest {
         val response = client.get("/repositories/rkociniewski/prime1")
         assertEquals(HttpStatusCode.NotFound, response.status)
-        assertEquals(defaultMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
+        assertEquals(gitHubResponseMapper.writeValueAsString(TestEntities.repoDetailsNotFound), response.bodyAsText())
     }
 }
