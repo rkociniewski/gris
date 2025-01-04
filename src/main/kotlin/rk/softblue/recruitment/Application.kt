@@ -23,7 +23,6 @@ fun Application.module() {
     configureSerialization()
     configureMonitoring()
     errorHandling()
-
 }
 
 fun Application.configureKoin() {

@@ -16,7 +16,7 @@ import rk.softblue.recruitment.model.JsonMapper
 import rk.softblue.recruitment.service.GitHubService
 import rk.softblue.recruitment.service.GitHubServiceImpl
 
-private val notFoundException = NotFoundException("Owner or repo name doesn't found.")
+val notFoundException = NotFoundException("Owner or repo name doesn't found.")
 
 private fun provideClient() = HttpClient(CIO) {
     expectSuccess = true

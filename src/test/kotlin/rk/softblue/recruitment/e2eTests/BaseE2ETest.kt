@@ -10,6 +10,7 @@ import org.koin.test.KoinTest
 import rk.softblue.recruitment.config.configureMonitoring
 import rk.softblue.recruitment.config.configureSerialization
 import rk.softblue.recruitment.config.errorHandling
+import rk.softblue.recruitment.configureKoin
 import rk.softblue.recruitment.controller.configureGHRouting
 import rk.softblue.recruitment.di.appModule
 import kotlin.test.AfterTest
@@ -32,6 +33,7 @@ open class BaseE2ETest : KoinTest {
     fun withTest(block: suspend ApplicationTestBuilder.() -> Unit) {
         testApplication {
             application {
+                configureKoin()
                 configureGHRouting()
                 configureSerialization()
                 configureMonitoring()
