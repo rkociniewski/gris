@@ -32,7 +32,6 @@ open class BaseE2ETest : KoinTest {
     fun withTest(block: suspend ApplicationTestBuilder.() -> Unit) {
         testApplication {
             application {
-
                 configureGHRouting()
                 configureSerialization()
                 configureMonitoring()

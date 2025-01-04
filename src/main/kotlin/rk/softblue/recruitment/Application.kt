@@ -1,14 +1,15 @@
 package rk.softblue.recruitment
 
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import org.koin.ktor.plugin.Koin
-import rk.softblue.recruitment.di.appModule
 import rk.softblue.recruitment.config.configureMonitoring
 import rk.softblue.recruitment.config.configureSerialization
 import rk.softblue.recruitment.config.errorHandling
 import rk.softblue.recruitment.controller.configureGHRouting
+import rk.softblue.recruitment.di.appModule
 
 fun main() {
     run()

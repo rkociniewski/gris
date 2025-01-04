@@ -1,8 +1,8 @@
 package rk.softblue.recruitment.e2eTests
 
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 import rk.softblue.recruitment.TestEntities
 import rk.softblue.recruitment.model.JsonMapper.defaultMapper
 import kotlin.test.Test

@@ -1,6 +1,6 @@
 package rk.softblue.recruitment
 
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import rk.softblue.recruitment.model.ErrorResponse
 import rk.softblue.recruitment.model.RepoDetails
 import java.time.LocalDateTime

@@ -14,6 +14,7 @@ val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
+val mockkVersion: String by project
 val testLoggerVersion: String by project
 val stoveVersion: String by project
 
@@ -55,7 +56,9 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     runtimeOnly("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("io.mockk:mockk:${mockkVersion}")
     testImplementation(kotlin("test-junit5"))
 }
 
