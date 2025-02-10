@@ -1,8 +1,10 @@
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -11,6 +13,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.jackson.JacksonConverter
 import io.ktor.utils.io.ByteReadChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
@@ -25,7 +29,7 @@ import rk.softblue.recruitment.service.GitHubServiceImpl
 import kotlin.test.AfterTest
 
 abstract class BaseUnitTest : KoinTest {
-    val exampleRepoDetailsJson = """
+    private val exampleRepoDetailsJson = """
         {
             "full_name": "example/repo",
             "description": "An Example Repo description",
@@ -34,6 +38,8 @@ abstract class BaseUnitTest : KoinTest {
             "created_at": "2025-01-01T00:00:00Z"
         }
     """.trimIndent()
+
+    private val malformedJson = exampleRepoDetailsJson.dropLast(1)
 
     @AfterTest
     fun tearDown() {
@@ -47,11 +53,26 @@ abstract class BaseUnitTest : KoinTest {
     // Mocking GitHubService and inject dependencies
     val service: GitHubService by inject()
 
-    fun withTest(statusCode: HttpStatusCode = HttpStatusCode.OK, block: suspend TestScope.() -> Unit) {
+    fun withTest(
+        statusCode: HttpStatusCode = HttpStatusCode.OK,
+        delay: Boolean = false,
+        invalidJson: Boolean = false,
+        emptyJson: Boolean = false,
+        block: suspend TestScope.() -> Unit
+    ) {
+        val byteChannelJson = when {
+            invalidJson -> malformedJson
+            emptyJson -> ""
+            else -> exampleRepoDetailsJson
+        }
+
         val mockEngine = MockEngine {
+            if (delay) {
+                delay(1000)
+            }
             capturedRequests.add(it.url.toString())
             respond(
-                content = ByteReadChannel(exampleRepoDetailsJson),
+                content = ByteReadChannel(byteChannelJson),
                 status = statusCode,
                 headers = headersOf("Content-Type" to listOf("application/json"))
             )
@@ -59,6 +80,13 @@ abstract class BaseUnitTest : KoinTest {
 
         // Creating HttpClient from MockEngine
         val client = HttpClient(mockEngine) {
+            if (delay) {
+                // Create an HttpClient with the MockEngine and configure the request timeout
+                install(HttpTimeout) {
+                    requestTimeoutMillis = 100 // Set the request timeout to 100 ms
+                }
+            }
+
             expectSuccess = true
             HttpResponseValidator {
                 validateResponse { response ->
