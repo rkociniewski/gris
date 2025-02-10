@@ -6,7 +6,6 @@ import io.ktor.client.statement.HttpResponse
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-
 class GitHubServiceImpl : GitHubService, KoinComponent {
     private val client by inject<HttpClient>()
 

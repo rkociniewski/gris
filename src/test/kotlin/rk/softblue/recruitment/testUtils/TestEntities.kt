@@ -1,4 +1,4 @@
-package rk.softblue.recruitment
+package rk.softblue.recruitment.testUtils
 
 import io.ktor.http.HttpStatusCode
 import rk.softblue.recruitment.model.ErrorResponse

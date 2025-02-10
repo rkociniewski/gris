@@ -3,8 +3,8 @@ package rk.softblue.recruitment.e2eTests
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import rk.softblue.recruitment.TestEntities
 import rk.softblue.recruitment.model.JsonMapper.gitHubResponseMapper
+import rk.softblue.recruitment.testUtils.TestEntities
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,7 +20,10 @@ class GithubControllerTest : BaseE2ETest() {
     fun `Should return 404 for non-existing endpoint`() = withTest {
         val response = client.get("/doesnt_exist")
         assertEquals(HttpStatusCode.NotFound, response.status)
-        assertEquals(gitHubResponseMapper.writeValueAsString(TestEntities.endpointNotFoundResponse), response.bodyAsText())
+        assertEquals(
+            gitHubResponseMapper.writeValueAsString(TestEntities.endpointNotFoundResponse),
+            response.bodyAsText()
+        )
     }
 
     @Test
