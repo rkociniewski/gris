@@ -8,7 +8,7 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import rk.softblue.recruitment.model.ErrorResponse
 
-fun Application.errorHandling() {
+fun Application.configureErrorHandling() {
     install(StatusPages) {
         exception<Throwable> { call, throwable ->
             when (throwable) {
@@ -16,9 +16,7 @@ fun Application.errorHandling() {
                     call.respond(
                         HttpStatusCode.BadRequest,
                         ErrorResponse(
-                            "${throwable.message}",
-                            HttpStatusCode.BadRequest.value,
-                            HttpStatusCode.BadRequest.description
+                            throwable.message ?: "Bad Request", HttpStatusCode.BadRequest
                         )
                     )
                 }
@@ -27,10 +25,15 @@ fun Application.errorHandling() {
                     call.respond(
                         HttpStatusCode.NotFound,
                         ErrorResponse(
-                            "${throwable.message}",
-                            HttpStatusCode.NotFound.value,
-                            HttpStatusCode.NotFound.description
+                            throwable.message ?: "Not Found", HttpStatusCode.NotFound
                         )
+                    )
+                }
+
+                else -> {
+                    call.respond(
+                        HttpStatusCode.InternalServerError,
+                        ErrorResponse(throwable.message ?: "Unexpected error", HttpStatusCode.InternalServerError)
                     )
                 }
             }
@@ -45,14 +48,14 @@ fun Application.errorHandling() {
                 HttpStatusCode.InternalServerError -> {
                     call.respond(
                         HttpStatusCode.InternalServerError,
-                        ErrorResponse("Internal server error", statusCode.value, statusCode.description)
+                        ErrorResponse("Internal server error", statusCode)
                     )
                 }
 
                 HttpStatusCode.BadRequest -> {
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        ErrorResponse("Request can't be handled.", statusCode.value, statusCode.description)
+                        ErrorResponse("Request can't be handled.", statusCode)
                     )
                 }
 
@@ -60,9 +63,7 @@ fun Application.errorHandling() {
                     call.respond(
                         HttpStatusCode.NotFound,
                         ErrorResponse(
-                            "Endpoint not found. Check spelling.",
-                            statusCode.value,
-                            statusCode.description
+                            "Endpoint not found. Check spelling.", statusCode
                         )
                     )
                 }

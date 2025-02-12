@@ -1,13 +1,12 @@
 package rk.softblue.recruitment.controller
 
-import io.ktor.client.call.body
 import io.ktor.server.application.Application
+import io.ktor.server.plugins.NotFoundException
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
-import rk.softblue.recruitment.model.RepoDetails
 import rk.softblue.recruitment.service.GitHubService
 
 fun Application.configureGHRouting() {
@@ -19,19 +18,20 @@ fun Application.configureGHRouting() {
         }
 
         get("/repositories/{owner}/{repositoryname}") {
-            val owner = call.parameters["owner"]
-            val repositoryName = call.parameters["repositoryname"]
+            val owner = call.parameters["owner"] ?: throw IllegalArgumentException("Owner must be not null!")
+            val repoName =
+                call.parameters["repositoryname"] ?: throw IllegalArgumentException("Repo name must be not null!")
+            val result = gitHubService.getRepoDetails(owner, repoName)
 
-            if (owner == null) {
-                throw IllegalArgumentException("Owner must be not null!")
-            }
-
-            if (repositoryName == null) {
-                throw IllegalArgumentException("Repo name must be not null!")
-            }
-
-            val response = gitHubService.getRepoDetails(owner.toString(), repositoryName.toString())
-            call.respond(response.body() as RepoDetails)
+            result.fold(
+                onSuccess = { call.respond(it) },
+                onFailure = { throwable ->
+                    when (throwable) {
+                        is NotFoundException -> throw throwable
+                        else -> throw RuntimeException("Unexpected error", throwable)
+                    }
+                }
+            )
         }
     }
 }

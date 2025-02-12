@@ -2,7 +2,7 @@ package rk.softblue.recruitment.testUtils
 
 import io.ktor.http.HttpStatusCode
 
-class TestBuilder {
+class UnitTestBuilder {
     private var statusCode = HttpStatusCode.OK
     private var testDelay: Boolean = false
     private var invalidJson = false

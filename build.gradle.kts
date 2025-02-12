@@ -1,22 +1,16 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-
 group = "rk.softblue"
 version = "1.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
 
-val dokkaVersion: String by project
 val jacksonVersion: String by project
-val junitVersion: String by project
 val koinVersion: String by project
 val kotlinLoggingVersion: String by project
-val kotlinVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
 val mockkVersion: String by project
-val testLoggerVersion: String by project
-val stoveVersion: String by project
 
 plugins {
     id("com.adarshr.test-logger")
@@ -55,7 +49,9 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
     runtimeOnly("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.mockk:mockk:${mockkVersion}")
