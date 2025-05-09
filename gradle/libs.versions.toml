@@ -5,10 +5,11 @@ koin = "4.1.0-Beta8"
 jackson = "2.19.0"
 logback = "1.5.18"
 kotlin-logging = "7.0.7"
-mockk = "1.13.14"
+mockk = "1.14.2"
 test-logger = "4.0.0"
 dokka = "2.0.0"
 manes = "0.52.0"
+detekt = "1.23.8"
 
 [libraries]
 jackson-module = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
@@ -38,6 +39,8 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = 
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
+detekt = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
 [libraries.test-junit5]
 module = "org.jetbrains.kotlin:kotlin-test-junit5"
 version.ref = "kotlin"
@@ -47,4 +50,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-manes = { id = "com.github.ben-manes.versions", version.ref = "manes"}
+manes = { id = "com.github.ben-manes.versions", version.ref = "manes" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

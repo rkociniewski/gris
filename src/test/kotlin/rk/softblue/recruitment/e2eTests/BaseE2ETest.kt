@@ -8,7 +8,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.jackson.JacksonConverter
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -16,7 +15,6 @@ import io.ktor.server.routing.routing
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import io.ktor.utils.io.KtorDsl
-import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -24,7 +22,6 @@ import org.koin.test.KoinTest
 import rk.softblue.recruitment.config.configureErrorHandling
 import rk.softblue.recruitment.config.configureMonitoring
 import rk.softblue.recruitment.config.configureSerialization
-import rk.softblue.recruitment.configureKoin
 import rk.softblue.recruitment.controller.configureGHRouting
 import rk.softblue.recruitment.di.notFoundException
 import rk.softblue.recruitment.model.JsonMapper.gitHubResponseMapper
@@ -62,7 +59,8 @@ open class BaseE2ETest : KoinTest {
                         }
                     }
                     handleResponseExceptionWithRequest { exception, _ ->
-                        val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                        val clientException =
+                            exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                         if (clientException.response.status == HttpStatusCode.NotFound) {
                             throw notFoundException
                         }

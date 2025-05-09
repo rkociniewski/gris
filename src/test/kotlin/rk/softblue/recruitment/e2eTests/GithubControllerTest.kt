@@ -7,7 +7,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import rk.softblue.recruitment.model.JsonMapper.gitHubResponseMapper
-import rk.softblue.recruitment.model.RepoDetails
 import rk.softblue.recruitment.testUtils.TestEntities
 import rk.softblue.recruitment.testUtils.TestEntities.repoDetailsNotFound
 import kotlin.test.Test

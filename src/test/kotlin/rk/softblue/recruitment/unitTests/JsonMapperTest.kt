@@ -26,8 +26,6 @@ class JsonMapperTest : BaseUnitTest() {
     fun `should map GitHub API response to RepoDetails`() = UnitTestBuilder().build().withTest {
         val result = service.getRepoDetails("not", "exists")
 
-        print("result: $result")
-
         val response = result.getOrThrow()
 
         assertEquals(exampleRepoDetails.fullName, response.fullName)
@@ -151,7 +149,7 @@ class JsonMapperTest : BaseUnitTest() {
     @Test
     fun `should throw exception for invalid stars type`() {
         assertFailsWith<MismatchedInputException> {
-            gitHubResponseMapper.readValue( invalidStarsJson, RepoDetails::class.java)
+            gitHubResponseMapper.readValue(invalidStarsJson, RepoDetails::class.java)
         }
     }
 }

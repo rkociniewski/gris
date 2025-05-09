@@ -1,4 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "rk.softblue"
@@ -11,13 +13,11 @@ plugins {
     alias(libs.plugins.test.logger)
     alias(libs.plugins.dokka)
     alias(libs.plugins.manes)
+    alias(libs.plugins.detekt)
 }
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-    }
 }
 
 java {
@@ -32,6 +32,8 @@ application {
 }
 
 dependencies {
+    detektPlugins(libs.detekt)
+
     implementation(libs.jackson.module)
     implementation(libs.jackson.datatype)
 
@@ -75,22 +77,16 @@ tasks.test {
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     useJUnitPlatform()
 }
-tasks {
-    // dokka configuration
-    dokkaHtml {
-        outputDirectory.set(layout.buildDirectory.dir("dokka")) // output directory of dokka documentation.
-        // source set configuration.
-        dokkaSourceSets {
-            named("main") { // source set name.
-                jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
-                skipDeprecated.set(false) // Add output to deprecated members. Applies globally, can be overridden by packageOptions
-                includeNonPublic.set(true) // non-public modifiers should be documented
-            }
-        }
-    }
 
-    test {
-        useJUnitPlatform()
+tasks.dokkaHtml {
+    outputDirectory.set(layout.buildDirectory.dir("dokka")) // output directory of dokka documentation.
+    // source set configuration.
+    dokkaSourceSets {
+        named("main") { // source set name.
+            jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
+            skipDeprecated.set(false) // Add output to deprecated members. Applies globally, can be overridden by packageOptions
+            includeNonPublic.set(true) // non-public modifiers should be documented
+        }
     }
 }
 
@@ -102,10 +98,23 @@ kotlin {
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
-    // Ogranicz tylko do stabilnych wersji
     rejectVersionIf {
         isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
+}
+
+detekt {
+    source.setFrom("src/main/kotlin")
+    config.setFrom("$projectDir/detekt.yml")
+    autoCorrect = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = JvmTarget.JVM_21.target
+}
+
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    jvmTarget = JvmTarget.JVM_21.target
 }
 
 fun isNonStable(version: String): Boolean {
