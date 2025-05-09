@@ -1,22 +1,16 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "rk.softblue"
 version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
-
-val jacksonVersion: String by project
-val koinVersion: String by project
-val kotlinLoggingVersion: String by project
-val ktorVersion: String by project
-val logbackVersion: String by project
-val mockkVersion: String by project
+val javaVersion = JavaVersion.VERSION_21
 
 plugins {
-    id("com.adarshr.test-logger")
-    id("org.jetbrains.dokka")
-    id("io.ktor.plugin")
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor)
+    alias(libs.plugins.test.logger)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.manes)
 }
 
 repositories {
@@ -26,6 +20,11 @@ repositories {
     }
 }
 
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
 application {
     mainClass.set("rk.softblue.recruitment.ApplicationKt")
     val isDevelopment: Boolean = project.ext.has("development")
@@ -33,30 +32,36 @@ application {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("io.insert-koin:koin-ktor3:$koinVersion")
-    implementation("io.insert-koin:koin-test:$koinVersion")
-    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation(libs.jackson.module)
+    implementation(libs.jackson.datatype)
 
-    runtimeOnly("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.test)
+    implementation(libs.koin.logger)
 
-    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("io.mockk:mockk:${mockkVersion}")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.negotiation)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.ktor.serialization.kotlinx)
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.negotiation)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.status)
+
+    implementation(libs.logback)
+    runtimeOnly(libs.kotlin.logging)
+
+    testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.mockk)
     testImplementation(kotlin("test-junit5"))
 }
+
 
 testlogger {
     showStackTraces = false
@@ -67,9 +72,9 @@ testlogger {
 }
 
 tasks.test {
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
     useJUnitPlatform()
 }
-
 tasks {
     // dokka configuration
     dokkaHtml {
@@ -94,4 +99,16 @@ kotlin {
         verbose = true // enable verbose logging output
         jvmTarget.set(JvmTarget.fromTarget(java.targetCompatibility.toString())) // target version of the generated JVM bytecode
     }
+}
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    // Ogranicz tylko do stabilnych wersji
+    rejectVersionIf {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
+    }
+}
+
+fun isNonStable(version: String): Boolean {
+    return listOf("alpha", "beta", "rc", "cr", "m", "preview", "snapshot", "dev")
+        .any { version.lowercase().contains(it) }
 }

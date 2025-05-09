@@ -7,6 +7,7 @@ import io.ktor.server.plugins.NotFoundException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import rk.softblue.recruitment.model.ErrorResponse
+import rk.softblue.recruitment.model.RepoDetails
 
 fun Application.configureErrorHandling() {
     install(StatusPages) {
@@ -33,7 +34,7 @@ fun Application.configureErrorHandling() {
                 else -> {
                     call.respond(
                         HttpStatusCode.InternalServerError,
-                        ErrorResponse(throwable.message ?: "Unexpected error", HttpStatusCode.InternalServerError)
+                        ErrorResponse(throwable.message ?: "Unexpected error", call.response.status() ?: HttpStatusCode.InternalServerError)
                     )
                 }
             }
@@ -42,10 +43,12 @@ fun Application.configureErrorHandling() {
         status(
             HttpStatusCode.InternalServerError,
             HttpStatusCode.NotFound,
-            HttpStatusCode.BadRequest
+            HttpStatusCode.BadRequest,
+            HttpStatusCode.OK
         ) { call, statusCode ->
             when (statusCode) {
                 HttpStatusCode.InternalServerError -> {
+                    println("Internal server error")
                     call.respond(
                         HttpStatusCode.InternalServerError,
                         ErrorResponse("Internal server error", statusCode)

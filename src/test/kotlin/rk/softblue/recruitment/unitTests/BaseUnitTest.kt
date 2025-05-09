@@ -34,7 +34,7 @@ abstract class BaseUnitTest : KoinTest {
             "description": "An Example Repo description",
             "clone_url": "https://github.com/example/repo.git",
             "stargazers_count": 2137,
-            "created_at": "2025-01-01T00:00:00Z"
+            "created_at": "2025-01-01T00:00:00"
         }
     """.trimIndent()
 

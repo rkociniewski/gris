@@ -1,32 +1,13 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
         gradlePluginPortal()
         mavenLocal()
         mavenCentral()
-    }
-
-    val dokkaId: String by settings
-    val dokkaVersion: String by settings
-    val kotlinId: String by settings
-    val kotlinVersion: String by settings
-    val ktorId: String by settings
-    val ktorVersion: String by settings
-    val testLoggerId: String by settings
-    val testLoggerVersion: String by settings
-
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.namespace?.startsWith(kotlinId) == true) {
-                useVersion(kotlinVersion)
-            }
-
-            when (requested.id.id) {
-                testLoggerId -> useVersion(testLoggerVersion)
-                dokkaId -> useVersion(dokkaVersion)
-                kotlinId -> useVersion(kotlinVersion)
-                ktorId -> useVersion(ktorVersion)
-            }
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
         }
     }
 }
