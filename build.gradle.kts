@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "rk.softblue"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 val javaVersion = JavaVersion.VERSION_21
 
 plugins {
@@ -54,6 +54,11 @@ dependencies {
     implementation(libs.ktor.server.negotiation)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.status)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.openapi)
+    implementation(libs.ktor.server.cors)
+
+    implementation(libs.swagger)
 
     implementation(libs.logback)
     implementation(libs.kotlin.logging)

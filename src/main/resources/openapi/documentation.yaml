@@ -1,0 +1,125 @@
+openapi: "3.0.3"
+info:
+    title: "GitHub Repository Info Service"
+    description: "A REST service that provides details about GitHub repositories"
+    version: "1.0.0"
+    contact:
+        name: "Rafał Kociniewski"
+        url: "https://github.com/rkociniewski/recruitment-task"
+
+servers:
+    - url: "http://localhost:8080"
+      description: "Development server"
+
+paths:
+    /:
+        get:
+            summary: "Hello World Ping"
+            description: "Checks if server is working"
+            operationId: "ping"
+            responses:
+                "200":
+                    description: "Server works!"
+                    content:
+                        plain/text:
+                            schema:
+                                type: string
+                                example: Hello World!
+    /repositories/{owner}/{repoName}:
+        get:
+            summary: "Get repository details"
+            description: "Retrieves information about a specific GitHub repository"
+            operationId: "getRepositoryDetails"
+            parameters:
+                - name: "owner"
+                  in: "path"
+                  description: "GitHub username or organization name"
+                  required: true
+                  schema:
+                      type: "string"
+                  example: "rkociniewski"
+                - name: "repoName"
+                  in: "path"
+                  description: "Repository name"
+                  required: true
+                  schema:
+                      type: "string"
+                  example: "recruitment-task"
+            responses:
+                "200":
+                    description: "Repository details retrieved successfully"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/RepositoryDetails"
+                "400":
+                    description: "Invalid request parameters"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "404":
+                    description: "Repository not found"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "500":
+                    description: "Internal server error"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+    schemas:
+        RepositoryDetails:
+            type: "object"
+            required:
+                - "fullName"
+                - "cloneUrl"
+                - "description"
+                - "stars"
+                - "createdAt"
+            properties:
+                fullName:
+                    type: "string"
+                    description: "Full name of the repository (owner/name)"
+                    example: "rkociniewski/recruitment-task"
+                description:
+                    type: "string"
+                    description: "Repository description"
+                    example: "A simple REST service for GitHub repository details"
+                cloneUrl:
+                    type: "string"
+                    description: "Git clone URL"
+                    example: "https://github.com/rkociniewski/recruitment-task.git"
+                stars:
+                    type: "integer"
+                    format: "int32"
+                    description: "Number of stargazers (stars)"
+                    example: 42
+                createdAt:
+                    type: "string"
+                    description: "Repository creation date, formatted in the requester's local date format"
+                    example: "2023-01-01 12:00:00"
+
+        ErrorResponse:
+            type: "object"
+            required:
+                - "message"
+                - "code"
+                - "status"
+            properties:
+                message:
+                    type: "string"
+                    description: "Error message"
+                    example: "Repository not found"
+                code:
+                    type: "string"
+                    description: "Error code"
+                    example: "404"
+                status:
+                    type: "string"
+                    description: "Status reason"
+                    example: "NOT FOUND"

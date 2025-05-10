@@ -35,12 +35,12 @@ fun Application.configureMonitoring() {
     }
 
     // Logowanie informacji o uruchomieniu aplikacji
-    environment.monitor.subscribe(ApplicationStarted) {
+    this.monitor.subscribe(ApplicationStarted) {
         logger.info { "Application started on port ${environment.config.property("ktor.deployment.port").getString()}" }
     }
 
     // Logowanie informacji o zatrzymaniu aplikacji
-    environment.monitor.subscribe(ApplicationStopped) {
+    this.monitor.subscribe(ApplicationStopped) {
         logger.info { "Application stopped" }
     }
 }

@@ -49,3 +49,4 @@ fun Application.configureGHRouting() {
         }
     }
 }
+
