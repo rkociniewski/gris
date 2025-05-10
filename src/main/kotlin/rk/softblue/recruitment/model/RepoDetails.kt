@@ -6,6 +6,16 @@ import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
 import java.time.LocalDateTime
 
+/**
+ * Data class representing GitHub repository details.
+ * Uses Jackson annotations to properly deserialize JSON from GitHub API responses.
+ *
+ * @property fullName The full name of the repository (username/repo-name)
+ * @property description The repository description
+ * @property cloneUrl The URL that can be used to clone the repository
+ * @property stars The number of stargazers (stars) the repository has
+ * @property createdAt The date and time when the repository was created
+ */
 data class RepoDetails(
     @JsonProperty("full_name")
     @JsonSetter(nulls = Nulls.SKIP)

@@ -1,6 +1,7 @@
 # GitHub Repository Info Service
 
-This is a simple RESTful service built in **Kotlin + Ktor** that fetches details of a public GitHub repository. The data is retrieved using GitHub's REST API and exposed through a single HTTP GET endpoint.
+This is a simple RESTful service built in **Kotlin + Ktor** that fetches details of a public GitHub repository. The data
+is retrieved using GitHub's REST API and exposed through a single HTTP GET endpoint.
 
 ## 🔍 Features
 
@@ -51,10 +52,12 @@ GET /repositories/{owner}/{repositoryname}
 ```
 
 #### Parameters:
+
 - `owner`: GitHub username or organization name
 - `repositoryname`: Name of the repository
 
 #### Response Format:
+
 ```json
 {
   "fullName": "owner/repositoryname",
@@ -68,10 +71,44 @@ GET /repositories/{owner}/{repositoryname}
 ### Error Responses
 
 | Code | Description                   |
-| ---- | ----------------------------- |
+|------|-------------------------------|
 | 400  | Invalid or missing parameters |
 | 404  | Repository not found          |
 | 500  | Internal server error         |
+
+---
+
+## 📄 API Documentation
+
+This project includes **OpenAPI** and **Swagger UI** integration for clear and interactive API exploration.
+
+### 🔍 Swagger UI
+
+You can access the Swagger interface in your browser at:
+
+```
+http://localhost:8080/swagger
+```
+
+It provides an interactive documentation page where you can test endpoints and inspect request/response schemas.
+
+### 📦 OpenAPI Specification
+
+The OpenAPI specification is available in YAML format at:
+
+```
+http://localhost:8080/openapi
+```
+
+The source file is located in:
+
+```
+src/main/resources/openapi/documentation.yaml
+```
+
+You can edit this file to keep the API contract in sync with the application logic.
+
+---
 
 ## ✅ Running Tests
 
@@ -113,4 +150,5 @@ This project is provided as-is under the MIT License.
 
 **Recruitment Task Summary:**
 
-> A simple REST service that returns information about a given GitHub repository. Delivered as a Gradle-based Kotlin project with test coverage and API compliance.
+> A simple REST service that returns information about a given GitHub repository. Delivered as a Gradle-based Kotlin
+> project with test coverage and API compliance.

@@ -11,18 +11,36 @@ import io.ktor.server.request.httpMethod
 import io.ktor.server.request.path
 import org.slf4j.event.Level
 
+/**
+ * Logger instance for this file.
+ */
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Configures request logging and application lifecycle monitoring.
+ *
+ * This function sets up:
+ * 1. HTTP request logging with detailed information about each request
+ * 2. Application lifecycle event logging (start and stop events)
+ *
+ * The logging includes:
+ * - HTTP method and path
+ * - Response status code
+ * - Request processing duration
+ * - User-Agent header
+ *
+ * @receiver Application The Ktor application instance.
+ */
 fun Application.configureMonitoring() {
     install(CallLogging) {
         level = Level.INFO
 
-        // Logowanie wszystkich zapytań HTTP
+        // Log all HTTP requests
         filter { call ->
             true
         }
 
-        // Dodatkowe informacje o zapytaniu
+        // Format log entries with additional request information
         format { call ->
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
@@ -34,12 +52,12 @@ fun Application.configureMonitoring() {
         }
     }
 
-    // Logowanie informacji o uruchomieniu aplikacji
+    // Log application startup information
     this.monitor.subscribe(ApplicationStarted) {
         logger.info { "Application started on port ${environment.config.property("ktor.deployment.port").getString()}" }
     }
 
-    // Logowanie informacji o zatrzymaniu aplikacji
+    // Log application shutdown information
     this.monitor.subscribe(ApplicationStopped) {
         logger.info { "Application stopped" }
     }

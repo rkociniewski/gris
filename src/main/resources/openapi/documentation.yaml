@@ -8,8 +8,8 @@ info:
         url: "https://github.com/rkociniewski/recruitment-task"
 
 servers:
-    - url: "http://localhost:8080"
-      description: "Development server"
+    -   url: "http://localhost:8080"
+        description: "Development server"
 
 paths:
     /:
@@ -31,20 +31,20 @@ paths:
             description: "Retrieves information about a specific GitHub repository"
             operationId: "getRepositoryDetails"
             parameters:
-                - name: "owner"
-                  in: "path"
-                  description: "GitHub username or organization name"
-                  required: true
-                  schema:
-                      type: "string"
-                  example: "rkociniewski"
-                - name: "repoName"
-                  in: "path"
-                  description: "Repository name"
-                  required: true
-                  schema:
-                      type: "string"
-                  example: "recruitment-task"
+                -   name: "owner"
+                    in: "path"
+                    description: "GitHub username or organization name"
+                    required: true
+                    schema:
+                        type: "string"
+                    example: "rkociniewski"
+                -   name: "repoName"
+                    in: "path"
+                    description: "Repository name"
+                    required: true
+                    schema:
+                        type: "string"
+                    example: "recruitment-task"
             responses:
                 "200":
                     description: "Repository details retrieved successfully"

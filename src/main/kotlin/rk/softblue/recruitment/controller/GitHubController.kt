@@ -14,19 +14,39 @@ import rk.softblue.recruitment.service.GitHubService
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Configures GitHub-related routing for the application.
+ * Sets up endpoints for fetching GitHub repository information.
+ *
+ * @param Application The application instance to configure
+ */
 @Suppress("ThrowsCount")
 fun Application.configureGHRouting() {
     val gitHubService: GitHubService by inject()
 
     routing {
+        /**
+         * Simple health check endpoint
+         * Returns "Hello World!" to indicate the service is running
+         */
         get("/") {
             call.respondText("Hello World!")
         }
 
+        /**
+         * Endpoint to retrieve GitHub repository details
+         * Path: /repositories/{owner}/{repoName}
+         *
+         * @param owner GitHub username or organization that owns the repository
+         * @param repoName The name of the repository to fetch details for
+         * @return Repository details as JSON or appropriate error response
+         *
+         * @throws BadRequestException If parameters are invalid or unexpected error occurs
+         * @throws NotFoundException If the requested repository doesn't exist
+         */
         get("/repositories/{owner}/{repoName}") {
             val owner = call.parameters["owner"]
             val repoName = call.parameters["repoName"]
-
             logger.info { "Received request for repository details: $owner/$repoName" }
 
             if (owner.isNullOrBlank() || repoName.isNullOrBlank()) {
@@ -36,7 +56,6 @@ fun Application.configureGHRouting() {
             }
 
             val result = gitHubService.getRepoDetails(owner, repoName)
-
             result.fold(
                 onSuccess = { call.respond(it) },
                 onFailure = { throwable ->
@@ -49,4 +68,3 @@ fun Application.configureGHRouting() {
         }
     }
 }
-

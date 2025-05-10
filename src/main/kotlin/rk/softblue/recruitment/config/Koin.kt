@@ -17,7 +17,15 @@ import rk.softblue.recruitment.di.appModule
 import rk.softblue.recruitment.di.notFoundException
 import rk.softblue.recruitment.model.JsonMapper
 
-
+/**
+ * Preconfigured an HTTP client for making API requests.
+ *
+ * Features:
+ * - Expects successful responses (throws exceptions for non-2xx responses)
+ * - Custom error handling for 404 responses
+ * - Logging of requests and responses
+ * - JSON content negotiation using Jackson
+ */
 private val appClient = HttpClient(CIO) {
     expectSuccess = true
     HttpResponseValidator {
@@ -44,6 +52,15 @@ private val appClient = HttpClient(CIO) {
     }
 }
 
+/**
+ * Configures dependency injection using Koin.
+ *
+ * This function sets up the Koin dependency injection framework with the application module.
+ * It allows for an optional custom HTTP client to be provided, which is useful for testing.
+ *
+ * @param httpClient The HTTP client to use for API requests. Defaults to [appClient].
+ * @receiver Application The Ktor application instance.
+ */
 fun Application.configureKoin(httpClient: HttpClient = appClient) {
     install(Koin) {
         // Adding modules

@@ -8,9 +8,24 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import rk.softblue.recruitment.model.ErrorResponse
 
+/**
+ * Configures global error handling for the application.
+ *
+ * This function sets up exception handling for various error scenarios by installing
+ * the StatusPages plugin.
+ *
+ * It handles common exceptions like IllegalArgumentException
+ * and NotFoundException, as well as generic Throwable instances.
+ *
+ * Additionally, it configures custom responses for specific HTTP status codes to provide
+ * consistent error formatting across the application.
+ *
+ * @receiver Application The Ktor application instance.
+ */
 @Suppress("LongMethod")
 fun Application.configureErrorHandling() {
     install(StatusPages) {
+        // Exception handling configuration
         exception<Throwable> { call, throwable ->
             when (throwable) {
                 is IllegalArgumentException -> {
@@ -43,6 +58,7 @@ fun Application.configureErrorHandling() {
             }
         }
 
+        // HTTP status code handling configuration
         status(
             HttpStatusCode.InternalServerError,
             HttpStatusCode.NotFound,
