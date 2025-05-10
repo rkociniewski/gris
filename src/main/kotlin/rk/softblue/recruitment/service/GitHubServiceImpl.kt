@@ -1,5 +1,6 @@
 package rk.softblue.recruitment.service
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -10,26 +11,39 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import rk.softblue.recruitment.model.RepoDetails
 
+
 @Suppress("TooGenericExceptionCaught")
 class GitHubServiceImpl : GitHubService, KoinComponent {
     private val client by inject<HttpClient>()
+    private val logger = KotlinLogging.logger {}
+
 
     override suspend fun getRepoDetails(owner: String, repoName: String): Result<RepoDetails> {
-        return try {
-            val response = client.get("https://api.github.com/repos/$owner/$repoName")
-            when (response.status) {
-                HttpStatusCode.OK -> {
-                    val repo = response.body<RepoDetails>()
-                    Result.success(repo)
-                }
+        logger.trace { "Fetching repo: $owner/$repoName" }
+        val response = client.get("https://api.github.com/repos/$owner/$repoName")
 
-                HttpStatusCode.NotFound ->
-                    Result.failure(NotFoundException("Repository not found for $owner/$repoName"))
+        logger.trace { "GitHub response: ${response.status}" }
 
-                else -> Result.failure(BadRequestException("Unexpected status: ${response.status}"))
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                logger.info { "Successfully fetched repository data from GitHub API: $owner/$repoName" }
+                response.body()
             }
-        } catch (e: Exception) {
-            Result.failure(e)
+
+            HttpStatusCode.NotFound -> {
+                logger.warn { "Repository not found on GitHub: $owner/$repoName" }
+                Result.failure(NotFoundException("Repository not found for $owner/$repoName"))
+            }
+
+            HttpStatusCode.Forbidden, HttpStatusCode.TooManyRequests -> {
+                logger.warn { "Rate limit exceeded for GitHub API (status: ${response.status})" }
+                Result.failure(BadRequestException("GitHub API rate limit exceeded"))
+            }
+
+            else -> {
+                logger.error { "Unexpected response from GitHub API: ${response.status}" }
+                Result.failure(RuntimeException("GitHub API error: ${response.status}"))
+            }
         }
     }
 }

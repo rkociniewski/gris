@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.ktor.server.status)
 
     implementation(libs.logback)
-    runtimeOnly(libs.kotlin.logging)
+    implementation(libs.kotlin.logging)
 
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.ktor.server.test.host)
