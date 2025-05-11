@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.NotFoundException
@@ -36,9 +37,9 @@ class GitHubServiceImpl : GitHubService, KoinComponent {
      * - RuntimeException: For other unexpected API responses
      */
     override suspend fun getRepoDetails(owner: String, repoName: String): Result<RepoDetails> {
-        logger.trace { "Fetching repo: $owner/$repoName" }
+        logger.info { "Fetching repo: $owner/$repoName" }
         val response = client.get("https://api.github.com/repos/$owner/$repoName")
-        logger.trace { "GitHub response: ${response.status}" }
+        logger.info { "GitHub response: ${response.status}" }
 
         return when (response.status) {
             HttpStatusCode.OK -> {

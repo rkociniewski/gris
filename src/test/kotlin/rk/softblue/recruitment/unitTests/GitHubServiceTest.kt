@@ -7,72 +7,81 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.JsonConvertException
 import io.ktor.server.plugins.NotFoundException
+import rk.softblue.recruitment.di.notFoundException
 import rk.softblue.recruitment.testUtils.TestEntities.exampleRepoDetails
 import rk.softblue.recruitment.testUtils.UnitTestBuilder
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class GitHubServiceTest : BaseUnitTest() {
 
     @Test
     fun `should fetch repository details successfully`() = UnitTestBuilder().build().withTest {
         val result = service.getRepoDetails("owner", "repository")
-        assert(result.isSuccess)
+        assertTrue { result.isSuccess }
         val repo = result.getOrThrow()
         assertEquals(exampleRepoDetails, repo)
         assertEquals("https://api.github.com/repos/owner/repository", capturedRequests.firstOrNull())
     }
 
     @Test
-    fun `should handle empty response`() = UnitTestBuilder().emptyJson(true).build().withTest {
-        val result = service.getRepoDetails("owner", "empty-repo")
-        assert(result.isFailure)
-        assert(result.exceptionOrNull() is JsonConvertException)
+    fun `should throw JsonConvertException for empty response`() = UnitTestBuilder().emptyJson(true).build().withTest {
+        assertFailsWith<JsonConvertException> { service.getRepoDetails("owner", "empty-repo") }
     }
 
     @Test
     fun `should handle NotFound`() =
         UnitTestBuilder().statusCode(HttpStatusCode.NotFound).build().withTest {
-            val result = service.getRepoDetails("owner", "nonexistent-repo")
-            assert(result.isFailure)
-            assert(result.exceptionOrNull() is NotFoundException)
+            // Assertion of throwable
+            assertFailsWith<NotFoundException>(
+                notFoundException.message,
+                { service.getRepoDetails("owner", "nonexistent-repo") }
+            )
         }
 
     @Test
     fun `should handle Internal Server Error`() =
         UnitTestBuilder().statusCode(HttpStatusCode.InternalServerError).build().withTest {
-            val result = service.getRepoDetails("owner", "repo")
-            assert(result.isFailure)
-            assert(result.exceptionOrNull() is ServerResponseException)
+            val exception = assertFailsWith<ServerResponseException> {
+                service.getRepoDetails("owner", "repo")
+            }
+            assertEquals(HttpStatusCode.InternalServerError, exception.response.status)
         }
 
     @Test
     fun `should handle Unauthorized (401)`() =
         UnitTestBuilder().statusCode(HttpStatusCode.Unauthorized).build().withTest {
-            val result = service.getRepoDetails("owner", "repo")
-            assert(result.isFailure)
-            assert(result.exceptionOrNull() is ClientRequestException)
+            val exception = assertFailsWith<ClientRequestException> {
+                service.getRepoDetails("owner", "repo")
+            }
+            assertEquals(HttpStatusCode.Unauthorized, exception.response.status)
         }
 
     @Test
     fun `should handle Forbidden (403)`() =
         UnitTestBuilder().statusCode(HttpStatusCode.Forbidden).build().withTest {
-            val result = service.getRepoDetails("owner", "repo")
-            assert(result.isFailure)
-            assert(result.exceptionOrNull() is ClientRequestException)
+            val exception = assertFailsWith<ClientRequestException> {
+                service.getRepoDetails("owner", "repo")
+            }
+            assertEquals(HttpStatusCode.Forbidden, exception.response.status)
         }
 
     @Test
     fun `should fail on malformed JSON`() = UnitTestBuilder().invalidJson(true).build().withTest {
-        val result = service.getRepoDetails("owner", "broken-repo")
-        assert(result.isFailure)
-        assert(result.exceptionOrNull() is JsonConvertException)
+        val exception = assertFailsWith<JsonConvertException> {
+            service.getRepoDetails("owner", "broken-repo").exceptionOrNull()
+        }
+
+        assertContains(exception.message ?: "", "Unexpected end-of-input")
     }
 
     @Test
     fun `should fail on request timeout`() = UnitTestBuilder().delay(true).build().withTest {
-        val result = service.getRepoDetails("owner", "timeout-repo")
-        assert(result.isFailure)
-        assert(result.exceptionOrNull() is HttpRequestTimeoutException)
+        assertFailsWith<HttpRequestTimeoutException> {
+            service.getRepoDetails("owner", "timeout-repo")
+        }
     }
 }
