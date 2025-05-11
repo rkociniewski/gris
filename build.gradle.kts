@@ -69,7 +69,6 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 }
 
-
 testlogger {
     showStackTraces = false
     showFullStackTraces = false
@@ -89,7 +88,7 @@ tasks.dokkaHtml {
     dokkaSourceSets {
         named("main") { // source set name.
             jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
-            skipDeprecated.set(false) // Add output to deprecated members. Applies globally, can be overridden by packageOptions
+            skipDeprecated.set(false) // Add output to deprecated members. PackageOptions can override applies globally
             includeNonPublic.set(true) // non-public modifiers should be documented
         }
     }
@@ -122,7 +121,7 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = JvmTarget.JVM_21.target
 }
 
-fun isNonStable(version: String): Boolean {
+private fun isNonStable(version: String): Boolean {
     return listOf("alpha", "beta", "rc", "cr", "m", "preview", "snapshot", "dev")
         .any { version.lowercase().contains(it) }
 }
