@@ -1,5 +1,13 @@
 # GitHub Repository Info Service
 
+[![version](https://img.shields.io/badge/version-1.0.0-yellow.svg)](https://semver.org)
+[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[![Build](https://github.com/rkociniewski/recruitment-task/actions/workflows/main.yml/badge.svg)](https://github.com/rkociniewski/recruitment-task/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/rkociniewski/recruitment-task/branch/main/graph/badge.svg)](https://codecov.io/gh/rkociniewski/recruitment-task)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-blueviolet?logo=kotlin)](https://kotlinlang.org/)
+[![Gradle](https://img.shields.io/badge/Gradle-8.14.1-blue?logo=gradle)](https://gradle.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-greem.svg)](https://opensource.org/licenses/MIT)
+
 This is a simple RESTful service built in **Kotlin + Ktor** that fetches details of a public GitHub repository. The data
 is retrieved using GitHub's REST API and exposed through a single HTTP GET endpoint.
 
@@ -152,3 +160,19 @@ This project is provided as-is under the MIT License.
 
 > A simple REST service that returns information about a given GitHub repository. Delivered as a Gradle-based Kotlin
 > project with test coverage and API compliance.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Built With
+
+* [Gradle](https://gradle.org/) - Dependency Management
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning.
+
+## Authors
+
+* **Rafał Kociniewski** - [PowerMilk](https://github.com/rkociniewski)

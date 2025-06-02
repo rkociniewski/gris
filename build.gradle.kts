@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "rk.softblue"
-version = "1.0"
+version = "1.0.0"
 val javaVersion = JavaVersion.VERSION_21
 
 plugins {
