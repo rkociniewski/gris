@@ -1,7 +1,7 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "rk.softblue"
 version = "1.0.0"
@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.test.logger)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.manes)
     alias(libs.plugins.detekt)
 }
 
@@ -97,13 +96,7 @@ tasks.dokkaHtml {
 kotlin {
     compilerOptions {
         verbose = true // enable verbose logging output
-        jvmTarget.set(JvmTarget.fromTarget(java.targetCompatibility.toString())) // target version of the generated JVM bytecode
-    }
-}
-
-tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
-    rejectVersionIf {
-        isNonStable(candidate.version) && !isNonStable(currentVersion)
+        jvmTarget.set(JvmTarget.fromTarget(java.targetCompatibility.toString()))
     }
 }
 
@@ -121,7 +114,7 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = JvmTarget.JVM_21.target
 }
 
-private fun isNonStable(version: String): Boolean {
-    return listOf("alpha", "beta", "rc", "cr", "m", "preview", "snapshot", "dev")
-        .any { version.lowercase().contains(it) }
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }
