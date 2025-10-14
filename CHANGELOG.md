@@ -21,13 +21,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### FIXED
 
-- Use proper QODAMA_TOKEN
+- Use proper QODANA_TOKEN
 
 ## 1.1.5 - 2025-10-14
 
 ### ADDED
 
-- Created Qodama CI scripts
+- Created Qodana CI scripts
 
 ## 1.1.4 - 2025-10-14
 

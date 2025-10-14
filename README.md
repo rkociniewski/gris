@@ -1,4 +1,4 @@
-# GitHub Repository Info Service
+# GitHub Repository Info Service (GRIS)
 
 [![version](https://img.shields.io/badge/version-1.1.8-yellow.svg)](https://semver.org)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
