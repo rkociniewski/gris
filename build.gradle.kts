@@ -1,11 +1,20 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "rk.softblue"
-version = "1.0.0"
+/**
+ * artifact group
+ */
+group = "rk.powermilk"
+
+/**
+ * project version
+ */
+version = "1.1.0"
+
 val javaVersion = JavaVersion.VERSION_21
+val jvmTargetVersion = JvmTarget.JVM_21.target
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -13,6 +22,7 @@ plugins {
     alias(libs.plugins.test.logger)
     alias(libs.plugins.dokka)
     alias(libs.plugins.detekt)
+    jacoco
 }
 
 repositories {
@@ -30,6 +40,7 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+// dependencies
 dependencies {
     detektPlugins(libs.detekt)
 
@@ -76,27 +87,10 @@ testlogger {
     showSimpleNames = true
 }
 
-tasks.test {
-    jvmArgs("-XX:+EnableDynamicAgentLoading")
-    useJUnitPlatform()
-}
-
-tasks.dokkaHtml {
-    outputDirectory.set(layout.buildDirectory.dir("dokka")) // output directory of dokka documentation.
-    // source set configuration.
-    dokkaSourceSets {
-        named("main") { // source set name.
-            jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
-            skipDeprecated.set(false) // Add output to deprecated members. PackageOptions can override applies globally
-            includeNonPublic.set(true) // non-public modifiers should be documented
-        }
-    }
-}
-
 kotlin {
     compilerOptions {
         verbose = true // enable verbose logging output
-        jvmTarget.set(JvmTarget.fromTarget(java.targetCompatibility.toString()))
+        jvmTarget.set(JvmTarget.fromTarget(jvmTargetVersion)) // target version of the generated JVM bytecode
     }
 }
 
@@ -106,15 +100,83 @@ detekt {
     autoCorrect = true
 }
 
+dokka {
+    dokkaSourceSets.main {
+        jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
+        skipDeprecated.set(false)
+    }
+
+    pluginsConfiguration.html {
+        dokkaSourceSets {
+            configureEach {
+                documentedVisibilities.set(
+                    setOf(
+                        VisibilityModifier.Public,
+                        VisibilityModifier.Private,
+                        VisibilityModifier.Protected,
+                        VisibilityModifier.Internal,
+                        VisibilityModifier.Package,
+                    )
+                )
+            }
+        }
+    }
+}
+
+tasks.test {
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    finalizedBy(tasks.jacocoTestCoverageVerification)
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.75".toBigDecimal()
+            }
+        }
+
+        rule {
+            enabled = true
+            element = "CLASS"
+            includes = listOf("rk.*")
+
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.75".toBigDecimal()
+            }
+        }
+    }
+}
+
+tasks.register("cleanReports") {
+    doLast {
+        delete("${layout.buildDirectory}/reports")
+    }
+}
+
+tasks.register("coverage") {
+    dependsOn(tasks.test, tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
+}
+
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = JvmTarget.JVM_21.target
+    jvmTarget = jvmTargetVersion
 }
 
 tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = JvmTarget.JVM_21.target
-}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.compilerOptions {
-    freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
+    jvmTarget = jvmTargetVersion
 }

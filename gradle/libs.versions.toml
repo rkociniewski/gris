@@ -1,19 +1,19 @@
 [versions]
-kotlin = "2.2.10"
-ktor = "3.2.3"
-koin = "4.1.0-Beta8"
-jackson = "2.19.2"
+kotlin = "2.2.20"
+ktor = "3.3.1"
+koin = "4.1.0"
+jackson = "3.0.0"
 logback = "1.5.18"
 kotlin-logging = "7.0.13"
-mockk = "1.14.5"
+mockk = "1.14.6"
 test-logger = "4.0.0"
 dokka = "2.0.0"
 detekt = "1.23.8"
-swagger = "2.2.36"
+swagger = "2.2.39"
 
 [libraries]
-jackson-module = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
-jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jackson-module = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-datatype = { module = "tools.jackson.module:jackson-datatype-jsr310", version.ref = "jackson" }
 
 koin-ktor = { module = "io.insert-koin:koin-ktor3", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
