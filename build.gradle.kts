@@ -11,7 +11,7 @@ group = "rk.powermilk"
 /**
  * project version
  */
-version = "1.1.8"
+version = "1.1.9"
 
 val javaVersion = JavaVersion.VERSION_21
 val jvmTargetVersion = JvmTarget.JVM_21.target
@@ -35,7 +35,7 @@ java {
 }
 
 application {
-    mainClass.set("rk.softblue.recruitment.ApplicationKt")
+    mainClass.set("rk.powermilk.gris.ApplicationKt")
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
