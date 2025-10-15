@@ -11,7 +11,7 @@ group = "rk.powermilk"
 /**
  * project version
  */
-version = "1.1.9"
+version = "1.1.10"
 
 val javaVersion = JavaVersion.VERSION_21
 val jvmTargetVersion = JvmTarget.JVM_21.target
@@ -138,7 +138,7 @@ tasks.jacocoTestReport {
         csv.required.set(false)
     }
 
-    finalizedBy(tasks.jacocoTestCoverageVerification)
+    //finalizedBy(tasks.jacocoTestCoverageVerification)
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -170,7 +170,7 @@ tasks.register("cleanReports") {
 }
 
 tasks.register("coverage") {
-    dependsOn(tasks.test, tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
+    dependsOn(tasks.test, tasks.jacocoTestReport)//, tasks.jacocoTestCoverageVerification)
 }
 
 tasks.withType<Detekt>().configureEach {

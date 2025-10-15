@@ -22,6 +22,7 @@ import org.koin.test.KoinTest
 import rk.powermilk.gris.config.configureErrorHandling
 import rk.powermilk.gris.config.configureMonitoring
 import rk.powermilk.gris.config.configureSerialization
+import rk.powermilk.gris.config.configureSwagger
 import rk.powermilk.gris.controller.configureGHRouting
 import rk.powermilk.gris.di.notFoundException
 import rk.powermilk.gris.model.JsonMapper.gitHubResponseMapper
@@ -76,6 +77,7 @@ open class BaseE2ETest : KoinTest {
                 configureMonitoring()
                 configureErrorHandling()
                 configureGHRouting()
+                configureSwagger()
             }
 
             environment {

@@ -83,7 +83,6 @@ abstract class BaseUnitTest : KoinTest {
                 }
             }
 
-            expectSuccess = true
             HttpResponseValidator {
                 validateResponse { response ->
                     if (response.status == HttpStatusCode.NotFound) {

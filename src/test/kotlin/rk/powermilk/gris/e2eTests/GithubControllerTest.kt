@@ -68,4 +68,43 @@ class GithubControllerTest : BaseE2ETest() {
             response.bodyAsText()
         )
     }
+
+    @Test
+    fun `Should return 500 for internal server error`() = withTest(HttpStatusCode.InternalServerError) {
+        val response = client.get("/repositories/error/trigger") {
+            header(HttpHeaders.Accept, ContentType.Application.Json.toString())
+        }
+
+        assertEquals(HttpStatusCode.InternalServerError, response.status)
+    }
+
+    @Test
+    fun `Should serve OpenAPI specification`() = withTest(HttpStatusCode.OK) {
+        val response = client.get("/openapi")
+        assertEquals(HttpStatusCode.OK, response.status)
+    }
+
+    @Test
+    fun `Should serve Swagger UI`() = withTest(HttpStatusCode.OK) {
+        val response = client.get("/swagger")
+        assertEquals(HttpStatusCode.OK, response.status)
+    }
+
+    @Test
+    fun `Should return 400 when owner is blank`() = withTest(HttpStatusCode.OK) {
+        val response = client.get("/repositories/%20/prime") {
+            header(HttpHeaders.Accept, ContentType.Application.Json.toString())
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
+    fun `Should return 400 when repoName is blank`() = withTest(HttpStatusCode.OK) {
+        val response = client.get("/repositories/owner/%20") {
+            header(HttpHeaders.Accept, ContentType.Application.Json.toString())
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
 }
