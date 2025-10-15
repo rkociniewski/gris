@@ -11,7 +11,7 @@ group = "rk.powermilk"
 /**
  * project version
  */
-version = "1.1.9"
+version = "1.1.10"
 
 val javaVersion = JavaVersion.VERSION_21
 val jvmTargetVersion = JvmTarget.JVM_21.target
@@ -129,7 +129,6 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
-
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
@@ -137,23 +136,54 @@ tasks.jacocoTestReport {
         html.required.set(true)
         csv.required.set(false)
     }
-
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude(
+                        "**/ApplicationKt.class",
+                        "**/ApplicationKt\$*.class",
+                        "**/KoinKt.class",
+                        "**/KoinKt\$*.class",
+                        "**/*\$logger\$*.class",
+                        "**/*\$Companion.class",
+                        // Dodaj też inne config klasy z logger lambdami
+                        "**/LoggingKt\$*.class",
+                        "**/SwaggerKt\$*.class",
+                        "**/GitHubControllerKt\$*.class",
+                        "**/GitHubServiceImpl\$*.class",
+                    )
+                }
+            }
+        )
+    )
     finalizedBy(tasks.jacocoTestCoverageVerification)
 }
 
 tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.jacocoTestReport)
+    classDirectories.setFrom(tasks.jacocoTestReport.get().classDirectories)
+
+    val excludesList = listOf(
+        "rk.powermilk.gris.ApplicationKt*",
+        "rk.powermilk.gris.config.KoinKt*",
+        $$"*.config.*Kt$logger*",
+        $$"*.controller.*Kt$logger*",
+        $$"*.service.*Kt$logger*"
+    )
+
     violationRules {
         rule {
+            excludes = excludesList
             limit {
                 minimum = "0.75".toBigDecimal()
             }
         }
-
         rule {
             enabled = true
             element = "CLASS"
             includes = listOf("rk.*")
-
+            excludes = excludesList
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"

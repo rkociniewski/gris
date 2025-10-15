@@ -1,9 +1,9 @@
 # GitHub Repository Info Service (GRIS)
 
-[![version](https://img.shields.io/badge/version-1.1.8-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.1.10-yellow.svg)](https://semver.org)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
-[![Build](https://github.com/rkociniewski/recruitment-task/actions/workflows/main.yml/badge.svg)](https://github.com/rkociniewski/recruitment-task/actions/workflows/main.yml)
-[![codecov](https://codecov.io/gh/rkociniewski/recruitment-task/branch/main/graph/badge.svg)](https://codecov.io/gh/rkociniewski/recruitment-task)
+[![Build](https://github.com/rkociniewski/gris/actions/workflows/main.yml/badge.svg)](https://github.com/rkociniewski/recruitment-task/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/rkociniewski/gris/branch/main/graph/badge.svg)](https://codecov.io/gh/rkociniewski/recruitment-task)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.20-blueviolet?logo=kotlin)](https://kotlinlang.org/)
 [![Gradle](https://img.shields.io/badge/Gradle-9.10-blue?logo=gradle)](https://gradle.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-greem.svg)](https://opensource.org/licenses/MIT)
