@@ -11,7 +11,7 @@ group = "rk.powermilk"
 /**
  * project version
  */
-version = "1.1.10"
+version = "1.1.11"
 
 val javaVersion = JavaVersion.VERSION_21
 val jvmTargetVersion = JvmTarget.JVM_21.target
@@ -102,7 +102,7 @@ detekt {
 
 dokka {
     dokkaSourceSets.main {
-        jdkVersion.set(java.targetCompatibility.toString().toInt()) // Used for linking to JDK documentation
+        jdkVersion.set(javaVersion.toString().toInt())
         skipDeprecated.set(false)
     }
 
@@ -142,16 +142,15 @@ tasks.jacocoTestReport {
                 fileTree(it) {
                     exclude(
                         "**/ApplicationKt.class",
-                        "**/ApplicationKt\$*.class",
+                        "**/ApplicationKt$*.class",
                         "**/KoinKt.class",
-                        "**/KoinKt\$*.class",
-                        "**/*\$logger\$*.class",
-                        "**/*\$Companion.class",
-                        // Dodaj też inne config klasy z logger lambdami
-                        "**/LoggingKt\$*.class",
-                        "**/SwaggerKt\$*.class",
-                        "**/GitHubControllerKt\$*.class",
-                        "**/GitHubServiceImpl\$*.class",
+                        "**/KoinKt$*.class",
+                        $$"**/*$logger$*.class",
+                        $$"**/*$Companion.class",
+                        "**/LoggingKt$*.class",
+                        "**/SwaggerKt$*.class",
+                        "**/GitHubControllerKt$*.class",
+                        "**/GitHubServiceImpl$*.class",
                     )
                 }
             }

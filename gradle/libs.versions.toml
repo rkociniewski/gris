@@ -7,7 +7,7 @@ logback = "1.5.19"
 kotlin-logging = "7.0.13"
 mockk = "1.14.6"
 test-logger = "4.0.0"
-dokka = "2.0.0"
+dokka = "2.1.0"
 detekt = "1.23.8"
 swagger = "2.2.39"
 

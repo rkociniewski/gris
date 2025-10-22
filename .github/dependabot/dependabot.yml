@@ -5,7 +5,8 @@ version: 2
 
 updates:
   # Gradle dependencies (Kotlin, libraries, etc.)
-  - package-ecosystem: "gradle"
+  -
+    package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -36,8 +37,9 @@ updates:
           - "*test*"
           -
 
-  # GitHub Actions workflows
-  - package-ecosystem: "github-actions"
+          # GitHub Actions workflows
+  -
+    package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"

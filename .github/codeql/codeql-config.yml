@@ -5,8 +5,10 @@ name: "CodeQL Config for Android"
 
 # Query suites to run
 queries:
-  - uses: default
-  - uses: security-and-quality
+  -
+    uses: default
+  -
+    uses: security-and-quality
 
 # Paths to exclude from analysis
 paths-ignore:
