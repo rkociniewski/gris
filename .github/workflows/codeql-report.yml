@@ -2,9 +2,8 @@ name: CodeQL Security Report
 
 on:
   schedule:
-    # Generate weekly report every Monday at 9 AM
     -
-      cron: '0 9 * * 1'
+      cron: '0 12 * * 1'
   workflow_dispatch:
 
 permissions:

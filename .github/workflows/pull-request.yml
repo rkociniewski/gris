@@ -31,7 +31,7 @@ jobs:
 
   pr-validation:
     runs-on: ubuntu-latest
-    continue-on-error: true  # Nie blokuj PR przy błędzie walidacji
+    continue-on-error: true
     steps:
       -
         name: Checkout code
