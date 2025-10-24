@@ -11,15 +11,14 @@ group = "rk.powermilk"
 /**
  * project version
  */
-version = "1.1.12"
+version = "1.1.13"
 
-val javaVersion = JavaVersion.VERSION_21
-val jvmTargetVersion = JvmTarget.JVM_21.target
+val javaVersion: JavaVersion = JavaVersion.VERSION_21
+val jvmTargetVersion = JvmTarget.JVM_21
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
-    alias(libs.plugins.test.logger)
     alias(libs.plugins.dokka)
     alias(libs.plugins.detekt)
     jacoco
@@ -76,21 +75,14 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.mockk)
-    testImplementation(kotlin("test-junit5"))
-}
-
-testlogger {
-    showStackTraces = false
-    showFullStackTraces = false
-    showCauses = false
-    slowThreshold = 10000
-    showSimpleNames = true
+    testImplementation(libs.junit.params)
+    testImplementation(libs.kotlin.test)
 }
 
 kotlin {
     compilerOptions {
-        verbose = true // enable verbose logging output
-        jvmTarget.set(JvmTarget.fromTarget(jvmTargetVersion)) // target version of the generated JVM bytecode
+        verbose = true
+        jvmTarget.set(jvmTargetVersion)
     }
 }
 
@@ -178,11 +170,13 @@ tasks.jacocoTestCoverageVerification {
                 minimum = "0.75".toBigDecimal()
             }
         }
+
         rule {
             enabled = true
             element = "CLASS"
             includes = listOf("rk.*")
             excludes = excludesList
+
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
@@ -203,9 +197,9 @@ tasks.register("coverage") {
 }
 
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = jvmTargetVersion
+    jvmTarget = jvmTargetVersion.target
 }
 
 tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = jvmTargetVersion
+    jvmTarget = jvmTargetVersion.target
 }
