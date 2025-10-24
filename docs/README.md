@@ -1,4 +1,4 @@
-# 📚 Recruitment Task
+# 📚 GitHub Repository Info Service (GRIS)
 
 ## 📖 Table of Contents
 
